@@ -8,6 +8,7 @@ A one-page map of the codebase. For setup and conventions see
 ```
 src/
 ├── main.ts                   Phaser game bootstrap; scene registration.
+├── pwa.ts                    Service-worker registration via `virtual:pwa-register`; `?nosw=1` unregisters existing registrations and caches.
 ├── config/                   Shared constants + back-compat barrels.
 │   ├── achievements.ts       Achievement definitions catalogue — id, label, description, and secret flag per achievement.
 │   ├── audioConfig.ts        SFX key ↔ event-name map; music track list.
@@ -540,3 +541,6 @@ automatically.
   via `LAZY_SCENE_LOADERS` in `lazySceneLoaders.ts` (built from the internal
   `LOADERS` array — that is the edit target). The elevator fade acts as the
   loading screen.
+- **PWA-first deploy defaults.** `vite-plugin-pwa` + `workbox-build`
+  generate/register a service worker for build and dev flows via `src/pwa.ts`;
+  `?nosw=1` is an explicit opt-out that unregisters the worker and clears caches.

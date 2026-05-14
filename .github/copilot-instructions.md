@@ -1,6 +1,6 @@
-# Copilot Instructions — So You Want To Be An Architect
+# So You Want To Be An Architect
 
-<!-- SYNC NOTICE: This file and CLAUDE.md (repo root) share the same
+<!-- SYNC NOTICE: CLAUDE.md and .github/copilot-instructions.md share the same
      project instructions. When you edit one, update the other to match. -->
 
 A TypeScript + Phaser 3 platformer about IT architecture, bundled with Vite. Progression-based: collect AU (Architecture Utility) to unlock floors of a building, each representing a domain team.
@@ -18,9 +18,12 @@ A TypeScript + Phaser 3 platformer about IT architecture, bundled with Vite. Pro
 ├── eslint.config.js
 ├── public/
 │   ├── brand/                # Norconsult Digital wordmark SVG (loaded as `lobby_logo` at boot)
+│   ├── icons/                # PWA icons used by the web app manifest.
+│   ├── manifest.webmanifest  # PWA web app manifest metadata.
 │   └── music/                # MP3/OGG/WAV music tracks; eager subset preloaded in BootScene, rest lazy-loaded by MusicPlugin
 ├── src/
 │   ├── main.ts               # Phaser.Game bootstrap; spreads SCENE_CLASSES from sceneRegistry
+│   ├── pwa.ts                # Service-worker registration via virtual:pwa-register; ?nosw=1 unregisters.
 │   ├── config/               # gameConfig, levelData, audioConfig, levelGeometry, achievements; info/ and quiz/ barrels
 │   ├── entities/             # Player, Enemy (+ enemies/), Token, DroppedAU, Elevator,
 │   │                         # MovingPlatform, Coffee, EnergyDrinkFridge, CEOBoss,
@@ -64,7 +67,7 @@ A TypeScript + Phaser 3 platformer about IT architecture, bundled with Vite. Pro
 
 See `docs/architecture.md` for the full module map.
 
-There is **no** `public/assets/` directory. Static files: `public/music/` (MP3/OGG/WAV tracks; the `eager: true` subset of `STATIC_MUSIC_ASSETS` is preloaded in `BootScene.preload()`, the rest are lazy-loaded by `MusicPlugin` on first use) and `public/brand/` (the Norconsult Digital wordmark SVG, loaded as `lobby_logo`). Sprites and SFX are still generated procedurally by `SpriteGenerator` / `SoundGenerator`.
+There is **no** `public/assets/` directory. Static files: `public/music/` (MP3/OGG/WAV tracks; the `eager: true` subset of `STATIC_MUSIC_ASSETS` is preloaded in `BootScene.preload()`, the rest are lazy-loaded by `MusicPlugin` on first use), `public/brand/` (the Norconsult Digital wordmark SVG, loaded as `lobby_logo`), `public/icons/` (PWA icons), and `public/manifest.webmanifest` (PWA manifest metadata). Sprites and SFX are still generated procedurally by `SpriteGenerator` / `SoundGenerator`.
 
 ## Language, tooling, scripts
 
