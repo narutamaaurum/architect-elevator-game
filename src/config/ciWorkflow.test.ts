@@ -9,6 +9,11 @@ const workflowNameValues = ciWorkflow
   .map((line) => line.slice('name: '.length));
 
 describe('CI required-check job names', () => {
+  it('uses pull_request trigger and avoids pull_request_target', () => {
+    expect(ciWorkflow).toContain('pull_request:');
+    expect(ciWorkflow).not.toContain('pull_request_target:');
+  });
+
   it('keeps the lint/unit required check name stable', () => {
     expect(workflowNameValues).toContain('Lint + typecheck + unit tests');
   });
@@ -25,5 +30,11 @@ describe('CI required-check job names', () => {
     expect(workflowNameValues).not.toContain('Playwright E2E (shard 2/4)');
     expect(workflowNameValues).not.toContain('Playwright E2E (shard 3/4)');
     expect(workflowNameValues).not.toContain('Playwright E2E (shard 4/4)');
+  });
+
+  it('uses PR-number concurrency keys for pull_request runs', () => {
+    expect(ciWorkflow).toContain("github.event_name == 'pull_request'");
+    expect(ciWorkflow).toContain("format('ci-pr-{0}', github.event.pull_request.number)");
+    expect(ciWorkflow).not.toContain("github.event_name == 'pull_request_target'");
   });
 });
