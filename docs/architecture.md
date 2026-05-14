@@ -491,9 +491,9 @@ automatically.
 - **Type safety** (`npm run build`) runs `tsc` strict before Vite
   bundles.
 - **Coverage thresholds** (`vitest.config.ts`): `src/systems/**` and
-  `src/input/**` at 80%; `src/ui/**` at 65% (60% branches);
-  `src/entities/**` at 60%; `src/scenes/**` at 20% (18% functions);
-  `src/features/floors/**` at 25% (20% branches, 25% functions, 25% statements).
+  `src/input/**` at 80% (`src/systems/**` branches at 75%); `src/ui/**` at 75% (70% branches);
+  `src/entities/**` at 60%; `src/scenes/**` at 40% (20% branches, 35% functions);
+  `src/features/floors/**` at 45% (40% branches, 40% functions).
   `src/plugins/**`, `src/main.ts`, the procedural-generator modules
   (`src/systems/SpriteGenerator.ts`, `src/systems/sprites/**`,
   `src/systems/SoundGenerator.ts`, `src/systems/sounds/**`), and a
