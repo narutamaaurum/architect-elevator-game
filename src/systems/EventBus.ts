@@ -32,6 +32,8 @@ export interface GameEvents {
    * for non-eager tracks.
    */
   'music:request-push': [key: string];
+  /** Menu idle prewarm for lazy tracks has completed (loaded or skipped). */
+  'music:prewarm-complete': [];
   /** Toggle global audio mute (affects both music and SFX). */
   'audio:toggle-mute': [];
   /** Emitted by AudioManager when the mute state changes. */
