@@ -101,7 +101,8 @@ export const CURRENT_SAVE_VERSION = 3;
  * defaults so loading old saves never results in `undefined`.
  *
  * v2 → v3: adds activated checkpoint IDs per floor so mid-floor respawn
- * points survive scene re-entry.
+ * points survive scene re-entry; also injects bossDefeatedCount: 0 and
+ * mode: 'normal' (NG+ mode field) for saves predating those features.
  *
  * To add a new save version:
  *   1. Bump CURRENT_SAVE_VERSION.
@@ -115,7 +116,7 @@ export type SaveMigrationMap = Record<number, (data: Record<string, unknown>) =>
 const MIGRATIONS: SaveMigrationMap = {
   0: (d) => d,
   1: (d) => ({ ...d, playtimeMs: 0, floorPlaytimeMs: {} }),
-  2: (d) => ({ ...d, activatedCheckpoints: {} }),
+  2: (d) => ({ ...d, activatedCheckpoints: {}, bossDefeatedCount: 0, mode: DEFAULT_GAME_MODE }),
 };
 
 

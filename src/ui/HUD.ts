@@ -113,6 +113,13 @@ export class HUD {
     this.timerText.setVisible(this._isTimerVisible());
     container.add(this.timerText as unknown as Phaser.GameObjects.GameObject);
 
+    this.ngPlusBadge = this.scene.add.text(GAME_WIDTH - 8, 14, 'NG+', {
+      fontFamily: 'monospace', fontSize: '14px',
+      color: theme.color.css.textPrimary, fontStyle: 'bold',
+    }).setOrigin(1, 0);
+    this.ngPlusBadge.setVisible(this.progression.isNgPlusMode());
+    container.add(this.ngPlusBadge as unknown as Phaser.GameObjects.GameObject);
+
     this.objectiveBanner = new ObjectiveBanner(this.scene, {
       getText: this.getObjectiveText,
       isModalOpen: this.isObjectiveHidden,
@@ -130,6 +137,11 @@ export class HUD {
         return;
       }
       this.toast.show(persistenceMessage(payload.reason));
+    });
+    lifecycle.bindEventBus('audio:mute-toggled', ({ muted, persisted }) => {
+      const base = muted ? '\uD83D\uDD07 Muted (M)' : '\uD83D\uDD0A Unmuted (M)';
+      const msg = persisted ? base : `${base} \u2014 not saved`;
+      this.toast.show(msg, 1_500);
     });
     // Re-render the title text colour when the high-contrast setting changes
     // so canvas HUD text also benefits from the accessibility toggle.
