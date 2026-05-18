@@ -8,7 +8,7 @@ const workflowNameValues = ciWorkflow
   .filter((line) => line.startsWith('name: '))
   .map((line) => line.slice('name: '.length));
 
-describe('CI required-check job names', () => {
+describe('CI workflow policy and required-check names', () => {
   it('uses pull_request trigger and avoids pull_request_target', () => {
     expect(ciWorkflow).toContain('pull_request:');
     expect(ciWorkflow).not.toContain('pull_request_target:');
