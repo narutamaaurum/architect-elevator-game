@@ -86,6 +86,7 @@ import { SCENE_MUSIC, STATIC_MUSIC_ASSETS } from '../../config/audioConfig';
 import { MenuScene } from './MenuScene';
 import * as MotionPreference from '../../systems/MotionPreference';
 import { createSceneLifecycle } from '../../systems/sceneLifecycle';
+import { eventBus } from '../../systems/EventBus';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -138,6 +139,7 @@ describe('MenuScene.idlePreloadMusic', () => {
 
   beforeEach(() => {
     origConnection = (navigator as unknown as Record<string, unknown>)['connection'];
+    vi.clearAllMocks();
   });
 
   afterEach(() => {
@@ -187,6 +189,7 @@ describe('MenuScene.idlePreloadMusic', () => {
     scene.idlePreloadMusic();
     expect(getPreloadedKeys()).toHaveLength(0);
     expect(getPreloadCalls()).toHaveLength(0);
+    expect(eventBus.emit).toHaveBeenCalledWith('music:prewarm-complete');
   });
 
   it('skips when saveData is true', () => {
@@ -195,6 +198,7 @@ describe('MenuScene.idlePreloadMusic', () => {
     scene.idlePreloadMusic();
     expect(getPreloadedKeys()).toHaveLength(0);
     expect(getPreloadCalls()).toHaveLength(0);
+    expect(eventBus.emit).toHaveBeenCalledWith('music:prewarm-complete');
   });
 
   it('skips on 2g connection', () => {
@@ -203,6 +207,7 @@ describe('MenuScene.idlePreloadMusic', () => {
     scene.idlePreloadMusic();
     expect(getPreloadedKeys()).toHaveLength(0);
     expect(getPreloadCalls()).toHaveLength(0);
+    expect(eventBus.emit).toHaveBeenCalledWith('music:prewarm-complete');
   });
 
   it('skips on slow-2g connection', () => {
@@ -256,6 +261,7 @@ describe('MenuScene.idlePreloadMusic — visibility guard', () => {
     scene.idlePreloadMusic();
     expect(getPreloadedKeys()).toHaveLength(0);
     expect(getPreloadCalls()).toHaveLength(0);
+    expect(eventBus.emit).not.toHaveBeenCalledWith('music:prewarm-complete');
   });
 
   it('loads normally when tab is visible', () => {
