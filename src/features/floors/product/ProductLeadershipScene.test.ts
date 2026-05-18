@@ -36,6 +36,10 @@ class TestableProductLeadershipScene extends ProductLeadershipScene {
   public getConfig(): LevelConfig {
     return this.getLevelConfig();
   }
+
+  public callCreateDecorations(): void {
+    this.createDecorations();
+  }
 }
 
 describe('ProductLeadershipScene — LevelConfig', () => {
@@ -93,5 +97,21 @@ describe('ProductLeadershipScene — LevelConfig', () => {
     expect(typeof cfg.exitPosition.y).toBe('number');
     expect(typeof cfg.playerStart.x).toBe('number');
     expect(typeof cfg.playerStart.y).toBe('number');
+  });
+
+  it('createDecorations adds plants, signpost and desk/monitor sprites', () => {
+    const scene = new TestableProductLeadershipScene() as any;
+
+    scene.addAmbientPlants = vi.fn();
+    scene.addSignpost = vi.fn();
+    scene.add = {
+      image: vi.fn(() => ({ setDepth: vi.fn() })),
+    };
+
+    scene.callCreateDecorations();
+
+    expect(scene.addAmbientPlants).toHaveBeenCalledTimes(1);
+    expect(scene.addSignpost).toHaveBeenCalledTimes(1);
+    expect(scene.add.image).toHaveBeenCalledTimes(4);
   });
 });

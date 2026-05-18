@@ -567,5 +567,6 @@ automatically.
   `LOADERS` array — that is the edit target). The elevator fade acts as the
   loading screen.
 - **PWA-first deploy defaults.** `vite-plugin-pwa` + `workbox-build`
-  generate/register a service worker for build and dev flows via `src/pwa.ts`;
+  generate/register a service worker for build/preview output via `src/pwa.ts`
+  (dev server registration is off in current config);
   `?nosw=1` is an explicit opt-out that unregisters the worker and clears caches.
