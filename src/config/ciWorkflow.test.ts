@@ -8,6 +8,16 @@ const workflowNameValues = ciWorkflow
   .filter((line) => line.startsWith('name: '))
   .map((line) => line.slice('name: '.length));
 
+function getJobBlock(jobId: string): string {
+  const lines = ciWorkflow.split('\n');
+  const start = lines.findIndex((line) => line === `  ${jobId}:`);
+  if (start < 0) return '';
+
+  const end = lines.findIndex((line, index) => index > start && /^ {2}[a-z0-9-]+:$/.test(line));
+  const jobLines = end < 0 ? lines.slice(start) : lines.slice(start, end);
+  return jobLines.join('\n');
+}
+
 describe('CI workflow policy and required-check names', () => {
   it('uses pull_request trigger and avoids pull_request_target', () => {
     expect(ciWorkflow).toContain('pull_request:');
@@ -36,5 +46,13 @@ describe('CI workflow policy and required-check names', () => {
     expect(ciWorkflow).toContain("github.event_name == 'pull_request'");
     expect(ciWorkflow).toContain("format('ci-pr-{0}', github.event.pull_request.number)");
     expect(ciWorkflow).not.toContain("github.event_name == 'pull_request_target'");
+  });
+
+  it('allows doc-only changes to skip shards while keeping fan-in green', () => {
+    const e2eJobBlock = getJobBlock('e2e');
+    const e2eCompleteJobBlock = getJobBlock('e2e-complete');
+
+    expect(e2eJobBlock).toContain("if: needs.changes.outputs.code == 'true'");
+    expect(e2eCompleteJobBlock).toContain('if [ "$e2e" = "success" ] || [ "$e2e" = "skipped" ]; then');
   });
 });

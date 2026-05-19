@@ -32,10 +32,24 @@ export interface GameEvents {
    * for non-eager tracks.
    */
   'music:request-push': [key: string];
+  /**
+   * A lazy-loaded music track failed to load (404, CORS error, network issue).
+   * Emitted by `MusicPlugin` from `playOrLoad` and `loadAndEmitPush` when the
+   * scene's loader fires a `loaderror` event for the queued audio asset.
+   * Payload: `key` — Phaser audio key; `url` — the URL that failed.
+   */
+  'music:load-error': [info: { key: string; url: string }];
   /** Toggle global audio mute (affects both music and SFX). */
   'audio:toggle-mute': [];
   /** Emitted by AudioManager when the mute state changes. */
   'audio:mute-changed': [muted: boolean];
+  /**
+   * Emitted by AudioManager immediately after the M-key (or any mute-toggle)
+   * completes. Carries the new muted state and whether the change was
+   * successfully persisted to localStorage (`persisted: false` when storage
+   * is unavailable or full).
+   */
+  'audio:mute-toggled': [payload: { muted: boolean; persisted: boolean }];
   /**
    * Emitted by SettingsStore whenever any volume-related setting changes
    * (masterVolume, musicVolume, sfxVolume, muteAll). AudioManager listens
@@ -55,8 +69,12 @@ export interface GameEvents {
   'zone:enter': [zoneId: string];
   'zone:exit': [zoneId: string];
 
+  /** Attempted to call a locked floor from the elevator UI / keypad. */
+  'ui:locked-floor-attempted': [payload: { floorId: FloorId; requiredAu: number; currentAu: number }];
+
   'sfx:info_open': [];
   'sfx:link_click': [];
+  'sfx:dialog_cancel': [];
   'sfx:jump': [];
   'sfx:footstep_a': [];
   'sfx:footstep_b': [];
@@ -73,6 +91,8 @@ export interface GameEvents {
   'sfx:heartbeat': [];
   /** Player activated a checkpoint. */
   'checkpoint:activate': [id: string];
+  /** Player reached a checkpoint; carries progress through the authored list. */
+  'checkpoint:reached': [payload: { index: number; total: number }];
   /** AU dropped by the player on hit. */
   'sfx:drop_au': [];
   /** Dropped AU recovered. */
@@ -128,6 +148,8 @@ export interface GameEvents {
 
   /** Caffeine buff activated; payload is the total duration in ms. */
   'buff:caffeine_start': [durationMs: number];
+  /** Caffeine buff was applied from a pickup/interactable. */
+  'buff:caffeine-applied': [];
   /** Caffeine buff expired. */
   'buff:caffeine_end': [];
 
@@ -156,6 +178,8 @@ export interface GameEvents {
    * floors players explore and where they churn.
    */
   'progression:floor_entered': [floorId: FloorId];
+  /** Human-readable floor-entry status for assistive technologies. */
+  'scene:floor-entered': [payload: { floorId: FloorId; displayName: string; objective: string }];
 
   /**
    * The player's total AU has crossed one of the explicit milestone thresholds
@@ -165,6 +189,8 @@ export interface GameEvents {
   'progression:au_milestone': [milestone: number];
   /** Any progression value changed (AU, floor, load) — UI can refresh derived text. */
   'progression:changed': [];
+  /** Objective banner text changed while a level scene is active. */
+  'objective:updated': [payload: { text: string }];
 
   /**
    * SaveManager failed to read or write a save slot.
