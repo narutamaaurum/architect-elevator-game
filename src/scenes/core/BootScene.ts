@@ -4,6 +4,7 @@ import type { GeneratorPhase } from '../../systems/SpriteGenerator';
 import { AudioManager } from '../../systems/AudioManager';
 import { GameStateManager } from '../../systems/GameStateManager';
 import { eventBus } from '../../systems/EventBus';
+import { getWorldModifiers } from '../../systems/WorldModifiers';
 import { STATIC_MUSIC_ASSETS } from '../../config/audioConfig';
 import { COLORS, FLOOR_IDS } from '../../config/gameConfig';
 import { theme } from '../../style/theme';
@@ -13,7 +14,6 @@ import { createAnalyticsService } from '../../systems/Analytics';
 import { setDailyState } from '../../systems/DailyChallenge';
 import { preloadInfoFor } from '../../config/info';
 import { preloadQuizFor } from '../../config/quiz';
-import { getWorldModifiers } from '../../systems/WorldModifiers';
 
 /** Count of static assets that failed to load during this boot pass. */
 let _bootAssetErrorCount = 0;

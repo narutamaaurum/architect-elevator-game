@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type * as Phaser from 'phaser';
 import { FLOORS } from '../../../config/gameConfig';
+import { LevelCheckpointManager } from './LevelCheckpointManager';
 
 vi.mock('phaser', () => ({ default: {} }));
 
@@ -24,6 +25,7 @@ const createdCheckpoints: MockCheckpoint[] = [];
 vi.mock('../../../entities/Checkpoint', () => ({
   Checkpoint: class MockCheckpointImpl {
     readonly wireOverlap = vi.fn();
+
     constructor(
       _scene: unknown,
       _x: number,
@@ -33,13 +35,12 @@ vi.mock('../../../entities/Checkpoint', () => ({
     ) {
       createdCheckpoints.push(this as unknown as MockCheckpoint);
     }
+
     triggerActivate(): void {
       this.onActivate();
     }
   },
 }));
-
-import { LevelCheckpointManager } from './LevelCheckpointManager';
 
 beforeEach(() => {
   reducedMotionState.value = false;
@@ -104,7 +105,7 @@ describe('LevelCheckpointManager', () => {
     }).toThrow('LevelCheckpointManager.spawn() called before setPlayer()');
   });
 
-  it('spawns checkpoints after setPlayer() and activates checkpoint callback', () => {
+  it('spawns checkpoints after setPlayer() and emits checkpoint events on activate', () => {
     const { mgr, scene, player } = makeHarness();
     mgr.setPlayer(player);
 
@@ -123,6 +124,7 @@ describe('LevelCheckpointManager', () => {
     createdCheckpoints[0]?.triggerActivate();
     expect(mgr.floorHazard.getCheckpointPos()).toEqual({ x: 100, y: 200 });
     expect(eventBusEmit).toHaveBeenCalledWith('checkpoint:activate', 'cp-1');
+    expect(eventBusEmit).toHaveBeenCalledWith('checkpoint:reached', { index: 1, total: 2 });
   });
 
   it('respawns player at checkpoint with camera flash when motion is enabled', () => {
