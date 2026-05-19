@@ -27,7 +27,7 @@ export default defineConfig({
         'src/ui/**': { lines: 75, branches: 70, functions: 75, statements: 75 },
         'src/entities/**': { lines: 60, branches: 60, functions: 60, statements: 60 },
         'src/scenes/**': { lines: 40, branches: 20, functions: 35, statements: 40 },
-        'src/features/floors/**': { lines: 44, branches: 40, functions: 40, statements: 44 },
+        'src/features/floors/**': { lines: 45, branches: 40, functions: 40, statements: 45 },
         'src/features/floors/boss/**': { lines: 75, branches: 60, functions: 70, statements: 75 },
       },
     },
